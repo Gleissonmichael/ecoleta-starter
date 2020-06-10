@@ -57,7 +57,7 @@ document
 .addEventListener("change", getCities)
 
 
-//Itens de coleta
+//items to collect
 
 const itemsToCollect = document.querySelectorAll(".items-grid li")
 
@@ -65,14 +65,39 @@ for (const item of itemsToCollect) {
     item.addEventListener("click", handleSelectedItem)
 }
 
+const collectedItems = document.querySelector("imput[name=items]");
+
 let selectedItems = []
 
 function handleSelectedItem(event) {
     const itemLi = event.target
 
+    //add or remove html class with javascript
     itemLi.classList.toggle("selected")
 
-    const itemId = event.target.dataset.id
+    const itemId = event.target.dataset.id;
 
+    //verify if exists selected items, if yes
+    //take the selected items
+
+    const alreadySelected = selectedItems.findIndex( item => item  == itemId)
+
+        
+    //if selected, remove select
+
+    if( alreadySelected >= 0) {
+        const filteredItems = selectedItems.filter( item => {
+            const itemIsDifferent = item != itemId
+            return itemIsDifferent;
+        })
+
+        selectedItems = filteredItems;
+    } else {
+            //if not selected, add to selection
+            selectedItems.push(itemId)        
+    }
     
+        //atualize the hidden camp witch data selected
+
+    collectedItems.value = selectedItems;
 }
