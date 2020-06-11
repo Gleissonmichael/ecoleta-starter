@@ -71,7 +71,7 @@
     padding: 16px 24px;
 
     font-size: 16px;
-    color #6c6c80;
+    color: #6c6c80;
 }
 
 #modal form button {
@@ -86,4 +86,8 @@
 
 #modal form button:hover {
     background-color: #2fb86e;
+}
+
+#modal.hide {
+    display: none;
 }
