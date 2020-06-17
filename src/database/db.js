@@ -1,8 +1,13 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("./src/database/database.db");
 
+module.exports = db;
+
+
 db.serialize(() => {
-   db.run(`
+   
+   //create table in bd
+  db.run(`
         CREATE TABLE IF NOT EXISTS places (
            id INTEGER PRIMARY KEY AUTOINCREMENT,
            image TEXT,
@@ -13,9 +18,11 @@ db.serialize(() => {
            city TEXT,
            items TEXT
         );            
-   `)
+   `);
 
-   const query = `
+
+   //add values in table
+  const query = `
       INSERT INTO places (
          image,
          name,
@@ -25,26 +32,46 @@ db.serialize(() => {
          city,
          items
       ) VALUES (?,?,?,?,?,?,?);
-   `
+   `;
 
-   const values = [
-      "https://images.unsplash.com/photo-1591971737811-cf7de8c11f32?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60",
-      "Colectoria",
-      "Guilherme Gemballa, Jardim America",
-      "Numero 260",
-      "Santa Catarina",
-      "Rio do Sul",
-      "Resíduos Eletrônicos, Lampadas"      
-   ]
+  const values = [
+    "https://images.unsplash.com/photo-1592030585273-850b38003803?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60",
+    "Papperside",
+    "Guilherme Gemballa, Jardim America",
+    "Numero 260",
+    "Santa Catarina",
+    "Rio do Sul",
+    "Resíduos Eletrônicos, Lampadas",
+  ];
 
-   db.run(query, values, function(err) {
-      if(err) {
-         return console.log(err)
-      }
+  function afterInsertData(err) {
+    if (err) {
+      return console.log(err);
+    }
 
-      console.log("cadastrado com sucesso")
-      console.log(this)
-   } )
-   
-   
-})
+    console.log("cadastrado com sucesso");
+    console.log(this);
+  }
+
+  db.run(query, values, afterInsertData);
+
+  //consult values in table
+  db.all(`SELECT * FROM places`, function(err, rows) {
+   if (err) {
+      return console.log(err);
+    }
+
+    console.log("Registros:");
+    console.log(rows);
+  })
+
+  //delete values in table
+/*   db.run(`DELETE FROM places WHERE id = ?`, [1], function(err) {
+   if (err) {
+      return console.log(err);
+    }
+    
+    console.log("Deleted")
+  })
+ */
+});
